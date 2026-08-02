@@ -34,12 +34,18 @@ print(monthly_sales.head())
 plt.figure(figsize=(10, 5))
 monthly_sales.plot(kind='line', marker='o', color='red')
 
-mplcursors.cursor(hover=True)
+cursor1 = mplcursors.cursor(hover=True)
+
+@cursor1.connect("add")
+def on_add(sel):
+    sel.annotation.set_text(f"Sales: ${sel.target[1]:,.0f}")
+
 
 plt.title('Total Revenue Trends Over Time')
 plt.xlabel('Order Date')
 plt.ylabel('Total Sales ($)')
 plt.grid(True)
+plt.savefig("figure1_revenue_trend.png", dpi=300, bbox_inches="tight")
 plt.show()
 
 
@@ -65,6 +71,7 @@ plt.xlabel('Total Sales ($)')
 plt.ylabel('Category, Sub-Category')
 plt.grid(True, axis='x')
 plt.tight_layout() 
+plt.savefig("figure2_top_categories.png", dpi=300, bbox_inches="tight")
 plt.show()
 
 
@@ -78,12 +85,16 @@ print(region_summary)
 chart_data = region_summary[['Sales', 'Profit Margin (%)']]
 chart_data.plot(kind='bar', secondary_y='Profit Margin (%)', figsize=(10,6), color=['skyblue', 'orange'])
 
-mplcursors.cursor(hover=True)
+cursor3 = mplcursors.cursor(hover=True)
+@cursor3.connect("add")
+def on_add(sel):
+    sel.annotation.set_text(f"Value: {sel.target[1]:,.2f}")
 
 plt.title('Gross Revenue vs. Regional Profit Margin')
 plt.xlabel('Region')
 plt.ylabel('Total Sales ($)')
 plt.tight_layout()
+plt.savefig("figure3_regional_profit.png", dpi=300, bbox_inches="tight")
 plt.show()
 
 
@@ -96,7 +107,10 @@ print(f"Correlation between Discount and Profit: {discount_corr:.2f}")
 plt.figure(figsize=(10, 6))
 sns.scatterplot(data=df, x='Discount', y='Profit', alpha=0.5, color='purple')
 
-mplcursors.cursor(hover=True)
+cursor4 = mplcursors.cursor(hover=True)
+@cursor4.connect("add")
+def on_add(sel):
+    sel.annotation.set_text(f"Discount: {sel.target[0]*100:.0f}%\nProfit: ${sel.target[1]:,.2f}")
 
 plt.axhline(0, color='black', linestyle='--')
 
@@ -105,4 +119,5 @@ plt.xlabel('Discount Amount')
 plt.ylabel('Profit ($)')
 plt.grid(True)
 plt.tight_layout()
+plt.savefig("figure4_discount_profit.png", dpi=300, bbox_inches="tight")
 plt.show()
